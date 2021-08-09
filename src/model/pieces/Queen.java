@@ -22,6 +22,9 @@ public class Queen extends Piece {
         Set<Tile> possibleDestinations = new HashSet<>();
         int rowInArray = (BOARD_SIZE - getTile().getPosition().getRow());
         int columnInArray = getTile().getPosition().getColumn().convertToInt();
+        int reversedRowInArray = (BOARD_SIZE - 1) - rowInArray;
+        int reversedColumnInArray = (BOARD_SIZE - 1) - columnInArray;
+
         //getting up destinations
         int numTilesToTop = rowInArray;
         HashSet<Tile> tilesToTop = super.tilesInOneDirection(numTilesToTop, rowInArray, columnInArray, UP, NEUTRAL);
@@ -48,8 +51,6 @@ public class Queen extends Piece {
         for (Tile tile : tilesToRight) {
             possibleDestinations.add(tile);
         }
-        int reversedRowInArray = (BOARD_SIZE - 1) - rowInArray;
-        int reversedColumnInArray = (BOARD_SIZE - 1) - columnInArray;
 
         //getting up-left destinations
         int numTilesToTopLeft = (rowInArray <= columnInArray) ? rowInArray : columnInArray;
