@@ -18,6 +18,7 @@ public class Pawn extends Piece {
     /**
      * adds the forward movement depending on starting position, then adds opponents in striking distance
      * try/catches are to catch calls to tiles that do not exist on the board
+     *
      * @return
      * @throws TileDoesNotExistException
      */
@@ -28,20 +29,28 @@ public class Pawn extends Piece {
         int columnInArray = getTile().getPosition().getColumn().convertToInt();
         PieceColor color = getColor();
         //starting positions
-        if ((getColor()==PieceColor.WHITE && getTile().getPosition().getRow() == 2) ||
-                (getColor()==PieceColor.BLACK && getTile().getPosition().getRow() == 7)) {
+        if ((getColor() == PieceColor.WHITE && getTile().getPosition().getRow() == 2) ||
+                (getColor() == PieceColor.BLACK && getTile().getPosition().getRow() == 7)) {
             switch (color) {
                 case WHITE:
-                        Tile oneUp = getGame().getBoard().getTiles()[rowInArray - 1][columnInArray];
+                    Tile oneUp = getGame().getBoard().getTiles()[rowInArray - 1][columnInArray];
+                    if (!oneUp.isOccupied()) {
                         possibleDestinations.add(oneUp);
-                        Tile twoUp = getGame().getBoard().getTiles()[rowInArray - 2][columnInArray];
+                    } ;
+                    Tile twoUp = getGame().getBoard().getTiles()[rowInArray - 2][columnInArray];
+                    if (!twoUp.isOccupied() && !oneUp.isOccupied()) {
                         possibleDestinations.add(twoUp);
+                    }
                     break;
                 case BLACK:
-                        Tile oneDown = getGame().getBoard().getTiles()[rowInArray + 1][columnInArray];
+                    Tile oneDown = getGame().getBoard().getTiles()[rowInArray + 1][columnInArray];
+                    if (!oneDown.isOccupied()) {
                         possibleDestinations.add(oneDown);
-                        Tile twoDown = getGame().getBoard().getTiles()[rowInArray + 2][columnInArray];
+                    }
+                    Tile twoDown = getGame().getBoard().getTiles()[rowInArray + 2][columnInArray];
+                    if (!twoDown.isOccupied()) {
                         possibleDestinations.add(twoDown);
+                    }
             }
             //not starting positions
         } else {
@@ -49,14 +58,18 @@ public class Pawn extends Piece {
                 case WHITE:
                     try {
                         Tile oneUp = getGame().getBoard().getTiles()[rowInArray - 1][columnInArray];
-                        possibleDestinations.add(oneUp);
+                        if (!oneUp.isOccupied()) {
+                            possibleDestinations.add(oneUp);
+                        }
                     } catch (ArrayIndexOutOfBoundsException e) {
                     }
                     break;
                 case BLACK:
                     try {
                         Tile oneDown = getGame().getBoard().getTiles()[rowInArray + 1][columnInArray];
-                        possibleDestinations.add(oneDown);
+                        if (!oneDown.isOccupied()) {
+                            possibleDestinations.add(oneDown);
+                        }
                     } catch (ArrayIndexOutOfBoundsException e) {
                     }
             }

@@ -10,6 +10,8 @@ import model.pieces.Pawn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static model.board.Column.A;
+import static model.board.Column.D;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PawnTest {
@@ -25,26 +27,46 @@ public class PawnTest {
     public void testGetPossibleDestinationsWhiteStart()
             throws TileDoesNotExistException, PlayerDoesNotOwnPieceOnGivenTileException {
         testPawn = (Pawn) testGame.getPlayerWhite().getPieceAt(Column.D, 2);
-        assertEquals("[[ D3 ---- ], [ D4 ---- ]]", testPawn.getPossibleDestinations().toString());
-        System.out.println(testPawn.getPossibleDestinations());
-
+        System.out.println();
+        testGame.getBoard().printBoardWithPossibleDestinations(testPawn);
     }
+
+    @Test
+    public void testGetPossibleDestinationsWhiteStartWithFirstOccupied()
+            throws TileDoesNotExistException, PlayerDoesNotOwnPieceOnGivenTileException, NewTileOccupiedException, TakePieceException {
+        testPawn = (Pawn) testGame.getPlayerWhite().getPieceAt(Column.D, 2);
+        Pawn opponentPawn = (Pawn) testGame.getPlayerBlack().getPieceAt(A, 7);
+        opponentPawn.moveTo(testGame.getBoard().getTileAt(D,3 ));
+        System.out.println();
+        testGame.getBoard().printBoardWithPossibleDestinations(testPawn);
+    }
+
+    @Test
+    public void testGetPossibleDestinationsWhiteStartWithSecondOccupied()
+            throws TileDoesNotExistException, PlayerDoesNotOwnPieceOnGivenTileException, NewTileOccupiedException, TakePieceException {
+        testPawn = (Pawn) testGame.getPlayerWhite().getPieceAt(Column.D, 2);
+        Pawn opponentPawn = (Pawn) testGame.getPlayerBlack().getPieceAt(A, 7);
+        opponentPawn.moveTo(testGame.getBoard().getTileAt(D,4 ));
+        System.out.println();
+        testGame.getBoard().printBoardWithPossibleDestinations(testPawn);
+    }
+
     @Test
     public void testGetPossibleDestinationsBlackStart()
             throws TileDoesNotExistException, PlayerDoesNotOwnPieceOnGivenTileException {
         testPawn = (Pawn) testGame.getPlayerBlack().getPieceAt(Column.G, 7);
-        assertEquals("[[ G6 ---- ], [ G5 ---- ]]", testPawn.getPossibleDestinations().toString());
-        System.out.println(testPawn.getPossibleDestinations());
-
+        System.out.println();
+        testGame.getBoard().printBoardWithPossibleDestinations(testPawn);
     }
+
     @Test
     public void testGetPossibleDestinationsWhiteNotStart()
             throws TileDoesNotExistException, PlayerDoesNotOwnPieceOnGivenTileException,
             NewTileOccupiedException, TakePieceException {
         testPawn = (Pawn) testGame.getPlayerWhite().getPieceAt(Column.D, 2);
         testPawn.moveTo(testGame.getBoard().getTileAt(Column.D, 3));
-        assertEquals("[[ D4 ---- ]]", testPawn.getPossibleDestinations().toString());
-        System.out.println(testPawn.getPossibleDestinations());
+        System.out.println();
+        testGame.getBoard().printBoardWithPossibleDestinations(testPawn);
     }
     @Test
     public void testGetPossibleDestinationsBlackNotStart()
@@ -52,8 +74,8 @@ public class PawnTest {
             NewTileOccupiedException, TakePieceException {
         testPawn = (Pawn) testGame.getPlayerBlack().getPieceAt(Column.G, 7);
         testPawn.moveTo(testGame.getBoard().getTileAt(Column.G, 6));
-        assertEquals("[[ G5 ---- ]]", testPawn.getPossibleDestinations().toString());
-        System.out.println(testPawn.getPossibleDestinations());
+        System.out.println();
+        testGame.getBoard().printBoardWithPossibleDestinations(testPawn);
     }
     @Test
     public void testGetPossibleDestinationsWhiteWithOneOpponent()
@@ -66,8 +88,8 @@ public class PawnTest {
         //visual confirmation
         System.out.println();
         testGame.getBoard().printBoard();
-        assertEquals("[[ D4 ---- ], [ C4 P(b) ]]", testPawn.getPossibleDestinations().toString());
-        System.out.println(testPawn.getPossibleDestinations());
+        System.out.println();
+        testGame.getBoard().printBoardWithPossibleDestinations(testPawn);
     }
 
     @Test
@@ -123,7 +145,7 @@ public class PawnTest {
     public void testGetPossibleDestinationsWhiteLeftEdgeWithOpponent()
             throws TileDoesNotExistException, PlayerDoesNotOwnPieceOnGivenTileException,
             NewTileOccupiedException, TakePieceException {
-        testPawn = (Pawn) testGame.getPlayerWhite().getPieceAt(Column.A, 2);
+        testPawn = (Pawn) testGame.getPlayerWhite().getPieceAt(A, 2);
         Pawn opponentTestPawn = (Pawn) testGame.getPlayerBlack().getPieceAt(Column.B, 7);
         opponentTestPawn.moveTo(testGame.getBoard().getTileAt(Column.B, 3));
         //visual confirmation
@@ -136,7 +158,7 @@ public class PawnTest {
     public void testGetPossibleDestinationsBlackLeftEdgeWithOpponent()
             throws TileDoesNotExistException, PlayerDoesNotOwnPieceOnGivenTileException,
             NewTileOccupiedException, TakePieceException {
-        testPawn = (Pawn) testGame.getPlayerBlack().getPieceAt(Column.A, 7);
+        testPawn = (Pawn) testGame.getPlayerBlack().getPieceAt(A, 7);
         Pawn opponentTestPawn = (Pawn) testGame.getPlayerWhite().getPieceAt(Column.B, 2);
         opponentTestPawn.moveTo(testGame.getBoard().getTileAt(Column.B, 6));
         //visual confirmation
