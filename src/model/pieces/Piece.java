@@ -13,6 +13,13 @@ public abstract class Piece {
     private PieceColor color;
     private Tile tile;
 
+    public enum YDirection {
+        UP, DOWN, NEUTRAL;
+    }
+    public enum XDirection {
+        LEFT, RIGHT, NEUTRAL;
+    }
+
     public Piece(Game game, PieceColor color) {
         this.color = color;
         this.game = game;
@@ -76,4 +83,50 @@ public abstract class Piece {
      * @throws TileDoesNotExistException
      */
     public abstract HashSet<Tile> getPossibleDestinations() throws TileDoesNotExistException;
+
+    public HashSet<Tile> tilesInOneDirection(int numberOfTilesToCheck,
+                                             int rowLocation,
+                                             int columnLocation,
+                                             YDirection y,
+                                             XDirection x) {
+        HashSet<Tile> possibleDestinationsInThisDirection = new HashSet<>();
+        boolean hasNotReachedPiece = true;
+        int i = 1;
+        while (hasNotReachedPiece && i <= numberOfTilesToCheck) {
+            Tile nextUp = getNextTile(rowLocation, columnLocation, y, x, i);
+            if (nextUp.isOccupied() && !nextUp.isOccupiedByOpponent(this)) {
+                hasNotReachedPiece = false;
+            } else if (nextUp.isOccupied() && nextUp.isOccupiedByOpponent(this)) {
+                possibleDestinationsInThisDirection.add(nextUp);
+                hasNotReachedPiece = false;
+            } else {
+                possibleDestinationsInThisDirection.add(nextUp);
+                i++;
+            }
+        }
+        return possibleDestinationsInThisDirection;
+    }
+
+    public Tile getNextTile(int rowLocation, int columnLocation, YDirection y, XDirection x, int i) {
+        switch (y) {
+            case UP:
+                switch (x) {
+                    case LEFT: return getGame().getBoard().getTiles()[rowLocation - i][columnLocation - i];
+                    case RIGHT: return getGame().getBoard().getTiles()[rowLocation - i][columnLocation + i];
+                    default: return getGame().getBoard().getTiles()[rowLocation - i][columnLocation];
+                }
+            case DOWN:
+                switch (x) {
+                    case LEFT: return getGame().getBoard().getTiles()[rowLocation + i][columnLocation - i];
+                    case RIGHT: return getGame().getBoard().getTiles()[rowLocation + i][columnLocation + i];
+                    default: return getGame().getBoard().getTiles()[rowLocation + i][columnLocation];
+                }
+            default:
+                switch (x) {
+                    case LEFT: return getGame().getBoard().getTiles()[rowLocation][columnLocation - i];
+                    case RIGHT: return getGame().getBoard().getTiles()[rowLocation][columnLocation + i];
+                    default: return getGame().getBoard().getTiles()[rowLocation][columnLocation];
+                }
+        }
+    }
 }
